@@ -1,0 +1,26 @@
+---
+- name: Disable dnsmasq
+  systemd:
+    name: dnsmasq
+    enabled: false
+  notify: reboot
+
+- name: Disable connman
+  systemd:
+    name: connman
+    enabled: false
+  notify: reboot
+
+- name: Install resolvconf
+  package:
+    name: resovlconf
+    state: present
+
+- name: Configure network interfaces
+  template:
+    src: etc-network-interfaces.j2
+    dest: /etc/network/interfaces
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  notify: restart-networking

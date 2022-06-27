@@ -1,0 +1,13 @@
+[Unit]
+Description=glass-isc-dhcp
+
+[Service]
+Type=simple
+Restart=always
+User=root
+Group=root
+WorkingDirectory=/opt/glass-isc-dhcp
+ExecStart=/usr/bin/npm start
+
+[Install]
+WantedBy=multi-user.target

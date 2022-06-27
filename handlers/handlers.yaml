@@ -1,0 +1,19 @@
+---
+- name: reboot
+  reboot:
+
+- name: restart networking
+  command: /etc/init.d/networking restart
+  become: true
+
+- name: restart-isc-dhcp-server
+  service:
+    name: isc-dhcp-server
+    state: restarted
+  become: true
+
+- name: restart-glass-isc-dhcp
+  service:
+    name: glass-isc-dhcp
+    state: restarted
+  become: true

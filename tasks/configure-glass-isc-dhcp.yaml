@@ -1,0 +1,81 @@
+---
+- name: Add NodeJS APT key
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
+  become: true
+
+- name: Add NodeJS APT Repo
+  apt_repository:
+    repo: deb https://deb.nodesource.com/node_16.x buster main
+    update_cache: yes
+  become: true
+
+- name: Install nodejs
+  package:
+    name:
+      - nodejs
+  become: true
+
+- name: Checkout glass-isc-dhcp
+  git:
+    repo: https://github.com/markafarrell/glass-isc-dhcp.git
+    dest: /opt/glass-isc-dhcp
+    update: false
+  become: true
+
+- name: Install glass-isc-dhcp packages
+  npm:
+    path: /opt/glass-isc-dhcp
+  become: true
+
+- name: Install systemd unit
+  template:
+    src: glass-isc-dhcp.service
+    dest: /etc/systemd/system/glass-isc-dhcp.service
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  become: true
+
+- name: Configure glass-isc-dhcp
+  template:
+    src: glass_config.json
+    dest: /opt/glass-isc-dhcp/config/glass_config.json
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  become: true
+  notify: restart-glass-isc-dhcp
+
+- name: Install dhcpd-pools
+  package:
+    name: dhcpd-pools
+  become: true
+
+- name: Get dhcpd-pools attributes
+  stat:
+    path: /opt/glass-isc-dhcp/bin/dhcpd-pools
+  register: dhcpd_pools_stat
+
+- name: Remove dhcpd-pools
+  file:
+    path: /opt/glass-isc-dhcp/bin/dhcpd-pools
+    state: absent
+  become: true
+  when: not dhcpd_pools_stat.stat.islnk
+
+- name: Install dhcpd-pools
+  file:
+    dest: /opt/glass-isc-dhcp/bin/dhcpd-pools
+    src: /usr/bin/dhcpd-pools
+    state: link
+  become: true
+  when: not dhcpd_pools_stat.stat.islnk
+
+- name: Start glass-isc-dhcp service
+  systemd:
+    name: glass-isc-dhcp
+    enabled: true
+    state: started
+  become: true

@@ -1,0 +1,30 @@
+---
+- name: Install python
+  hosts: all
+  gather_facts: false
+  tasks:
+    - import_tasks: tasks/bootstrap-python.yaml
+
+- name: Configure Credentials
+  hosts: all
+  gather_facts: false
+  tasks:
+    - import_tasks: tasks/bootstrap-credentials.yaml
+
+- name: Configure isc-dhcp-server
+  hosts: all
+  gather_facts: false
+  tasks:
+    - import_tasks: tasks/configure-isc-dhcp-server.yaml
+
+  handlers:
+    - import_tasks: handlers/handlers.yaml
+
+- name: Configure glass-isc-dhcp
+  hosts: all
+  gather_facts: false
+  tasks:
+    - import_tasks: tasks/configure-glass-isc-dhcp.yaml
+
+  handlers:
+    - import_tasks: handlers/handlers.yaml

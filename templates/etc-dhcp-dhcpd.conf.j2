@@ -1,0 +1,24 @@
+option domain-name "lan";
+option domain-name-servers {{ dns_servers | join(', ') }};
+# Set up our desired subnet:
+subnet {{ eth0_network }} netmask {{ eth0_netmask }} {
+    range {{ dhcp_range_start }} {{ dhcp_range_end }};
+    option subnet-mask {{ eth0_netmask }};
+    option broadcast-address {{ eth0_broadcast }};
+    option routers {{ eth0_gateway }};
+    option domain-name-servers {{ dns_servers | join(', ') }};
+# Set up our desired subnet:
+}
+default-lease-time 3600;
+max-lease-time 7200;
+# Show that we want to be the only DHCP server in this network:
+authoritative;
+
+# Define static leases
+
+{% for lease in static_leases %}
+host {{ lease.hostname }} {
+  hardware ethernet {{ lease.mac_address }};
+  fixed-address {{ lease.ip_address }};
+}
+{% endfor %}

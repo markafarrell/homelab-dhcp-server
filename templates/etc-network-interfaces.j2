@@ -1,0 +1,13 @@
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# Assign a static IP for this DHCP server through eth0:
+auto eth0
+iface eth0 inet static
+    address {{ eth0_ip_address }}
+    netmask {{ eth0_netmask }}
+    broadcast {{ eth0_broadcast }}
+    gateway {{ eth0_gateway }}
+    dns-nameservers {{ dns_servers | join(' ') }}
+    dns-search {{ dns_search }}

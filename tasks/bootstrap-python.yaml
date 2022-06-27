@@ -1,0 +1,12 @@
+---
+  - name: Update apt-cache
+    raw: apt update
+    become: true
+    vars:
+      ansible_become_password: "{{ ansible_ssh_password }}"
+
+  - name: Install python3
+    raw: apt install -y python3
+    become: true
+    vars:
+      ansible_become_password: "{{ ansible_ssh_password }}"
