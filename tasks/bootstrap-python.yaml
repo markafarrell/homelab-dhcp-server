@@ -1,6 +1,6 @@
 ---
   - name: Update apt-cache
-    raw: apt update
+    raw: apt -y update
     become: true
     vars:
       ansible_become_password: "{{ ansible_ssh_password }}"

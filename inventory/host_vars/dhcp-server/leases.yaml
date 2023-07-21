@@ -4,11 +4,14 @@ static_leases:
     mac_address: cc:f9:57:c5:fd:e9
     ip_address: 192.168.0.243
   - hostname: kube-master-0
-    mac_address: b8:27:eb:85:b6:41
+    mac_address: d8:3a:dd:27:ca:ef
     ip_address: 192.168.0.201
-  - hostname: kube-master-1
-    mac_address: b8:27:eb:71:9b:35
+  - hostname: kube-worker-0
+    mac_address: b8:27:eb:85:b6:41
     ip_address: 192.168.0.202
-  - hostname: kube-master-2
-    mac_address: b8:27:eb:6d:39:6c
+  - hostname: kube-worker-1
+    mac_address: b8:27:eb:71:9b:35
     ip_address: 192.168.0.203
+  - hostname: kube-worker-2
+    mac_address: b8:27:eb:6d:39:6c
+    ip_address: 192.168.0.204
